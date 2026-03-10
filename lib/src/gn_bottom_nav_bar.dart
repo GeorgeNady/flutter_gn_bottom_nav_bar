@@ -132,9 +132,11 @@ class _GnBottomNavBarState extends State<GnBottomNavBar> {
               onPressed: () {
                 if (!clickable) return;
 
+                final tappedIndex = widget.tabs.indexOf(t);
+
                 if(widget.handleTabChange) {
                   setState(() {
-                    selectedIndex = widget.tabs.indexOf(t);
+                    selectedIndex = tappedIndex;
                     clickable = false;
                   });
                 }
@@ -142,13 +144,15 @@ class _GnBottomNavBarState extends State<GnBottomNavBar> {
 
                 t.onPressed?.call();
 
-                widget.onTabChange?.call(selectedIndex);
+                widget.onTabChange?.call(tappedIndex);
 
                 if(widget.handleTabChange) {
                   Future.delayed(widget.duration, () {
-                    setState(() {
-                      clickable = true;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        clickable = true;
+                      });
+                    }
                   });
                 }
 
