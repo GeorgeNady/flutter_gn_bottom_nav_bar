@@ -13,6 +13,7 @@ class GnBottomNavBar extends StatefulWidget {
     required this.tabs,
     this.selectedIndex = 0,
     this.onTabChange,
+    this.handleTabChange = true,
     this.gap = 0,
     this.padding = const EdgeInsets.all(25),
     this.activeColor,
@@ -41,6 +42,7 @@ class GnBottomNavBar extends StatefulWidget {
   final List<GnButton> tabs;
   final int selectedIndex;
   final ValueChanged<int>? onTabChange;
+  final bool handleTabChange;
   final double gap;
   final double tabBorderRadius;
   final double? iconSize;
@@ -129,20 +131,27 @@ class _GnBottomNavBarState extends State<GnBottomNavBar> {
               duration: widget.duration,
               onPressed: () {
                 if (!clickable) return;
-                setState(() {
-                  selectedIndex = widget.tabs.indexOf(t);
-                  clickable = false;
-                });
+
+                if(widget.handleTabChange) {
+                  setState(() {
+                    selectedIndex = widget.tabs.indexOf(t);
+                    clickable = false;
+                  });
+                }
+
 
                 t.onPressed?.call();
 
                 widget.onTabChange?.call(selectedIndex);
 
-                Future.delayed(widget.duration, () {
-                  setState(() {
-                    clickable = true;
+                if(widget.handleTabChange) {
+                  Future.delayed(widget.duration, () {
+                    setState(() {
+                      clickable = true;
+                    });
                   });
-                });
+                }
+
               },
             ))
                 .toList()));

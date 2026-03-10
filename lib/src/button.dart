@@ -88,21 +88,22 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
         .drive(CurveTween(
         curve: _expanded ? widget.curve! : widget.curve!.flipped))
         .value;
-    var _colorTween =
+    var colorTween =
     ColorTween(begin: widget.iconColor, end: widget.iconActiveColor);
-    var _colorTweenAnimation = _colorTween.animate(CurvedAnimation(
+    var colorTweenAnimation = colorTween.animate(CurvedAnimation(
         parent: expandController,
         curve: _expanded ? Curves.easeInExpo : Curves.easeOutCirc));
 
     _expanded = !widget.active!;
-    if (_expanded)
+    if (_expanded) {
       expandController.reverse();
-    else
+    } else {
       expandController.forward();
+    }
 
     Widget icon = widget.leading ??
         Image.asset(widget.iconAsset ?? '',
-            color: _colorTweenAnimation.value, height: widget.iconSize, width: widget.iconSize,);
+            color: colorTweenAnimation.value, height: widget.iconSize, width: widget.iconSize,);
 
     return Material(
       type: MaterialType.transparency,
@@ -195,7 +196,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
                           child: Text(
                             widget.text!.data!,
                             style: TextStyle(
-                              color: _colorTweenAnimation.value,
+                              color: colorTweenAnimation.value,
                               fontSize: widget.textSize ?? 16,
                             ),
                           ),
